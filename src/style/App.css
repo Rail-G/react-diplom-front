@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&subset=cyrillic-ext');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&subset=cyrillic-ext');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 1250px;
+  margin: 0 auto;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+a {
+  color: #727e86;
+}
+
+a, a:hover, a:visited, a:active {
+  text-decoration: none;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+section {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.nav-link.active {
+  color: #ff0000;
+}
+
+h2, .h2 {
+  margin-bottom: 1.5em;
+  margin-top: 2em;
+}
+
+.btn-outline-primary {
+  color: #727e86;
+  border-color: #727e86;
+}
+
+.btn-outline-primary:hover {
+  background-color: #727e86;
+  border-color: #727e86;
+}
+
+.invisible {
+  opacity: 0;
+}
+
+.background-image {
+  width: 150px;
+  height: 150px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.error-img {
+  background-image: url(../svg/red-error.svg);
+  margin: -20px auto 20px;
+}
+
+.success-img {
+  background-image: url(../svg/green-success.svg);
+  margin: -20px auto 20px;
+}
+
+.empty-catalog-img {
+  background-image: url(../svg/empty-box.svg);
+  margin: -20px auto 20px;
+}
+
+.empty-cart-img {
+  background-image: url(../svg/empty-cart.svg);
+  margin: -20px auto 20px;
+}
+
+.top-sales {
+  min-height: 300px;
+}
+
+.display-f-aic {
+  display: flex;
+  align-items: center;
+}

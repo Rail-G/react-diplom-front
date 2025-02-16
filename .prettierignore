@@ -1,0 +1,12 @@
+node_modules
+.prettierignore
+dist
+package-lock.json
+package.json
+*.css
+*.svg
+*.html
+src/index.html
+README.md
+.gitignore
+.appveyor.yml

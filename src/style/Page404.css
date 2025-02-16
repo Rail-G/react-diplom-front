@@ -1,0 +1,19 @@
+.background-image {
+    width: 150px;
+    height: 150px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.not-found {
+    background-image: url(../svg/robot.svg);
+}
+
+.error-text {
+    font-size: 150px;
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
