@@ -15,6 +15,7 @@ export function Catalog({catalogPage}: {catalogPage: boolean}) {
   const {cards, loading, search, error} = useAppSelector(
     (state) => state.cards,
   );
+  const {currentCategoryId} = useAppSelector(state => state.categories)
   const dispatch = useDispatch();
   useEffect(() => {
     if (search.trim()) {
@@ -27,7 +28,8 @@ export function Catalog({catalogPage}: {catalogPage: boolean}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
   const onErrorClick = () => {
-    dispatch(searchCards(''));
+    const urlParams = new URLSearchParams({q: search, categoryId: String(currentCategoryId)});
+    dispatch(searchCards(urlParams.toString()));
   };
   return (
     <>
