@@ -6,10 +6,12 @@ interface CardList {
 
 export function CardList({itemsList}: CardList) {
   return (
-    <div className="row">
+    <div>
+      <ul className='row'>
       {itemsList.map((item) => (
-        <Card card={item} />
+        <li key={item.id} className='col-4'><Card card={item} /></li>
       ))}
+      </ul>
     </div>
   );
 }

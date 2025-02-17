@@ -49,7 +49,7 @@ export function CatalogNav() {
             </Link>
           </li>
           {categories.map((cat) => (
-            <li className="nav-item">
+            <li className="nav-item" key={cat.id}>
               <Link
                 className={`nav-link ${currentCategoryId == cat.id && 'active'}`}
                 onClick={() => onClick(cat.id)}

@@ -43,7 +43,7 @@ export function OrderForm({orders}: {orders: CartFinallyOrder[]}) {
   return (
     <section className="order">
       <h2 className="text-center">Оформить заказ</h2>
-      <div className="card" style={{maxWidth: '30rem; margin: 0 auto;'}}>
+      <div className="card" style={{maxWidth: '30rem', margin: '0 auto'}}>
         <form onSubmit={onSubmit} className="card-body">
           <div className="form-group">
             <label htmlFor="phone">Телефон</label>

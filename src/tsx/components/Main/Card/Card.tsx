@@ -3,7 +3,7 @@ import '../../../../style/Card.css';
 
 export function Card({card}: {card: Card}) {
   return (
-    <div className="col-4">
+    <div>
       <div className="card catalog-item-card">
         <img
           src={card.images[0]}

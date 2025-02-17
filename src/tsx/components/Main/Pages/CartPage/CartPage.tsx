@@ -62,7 +62,7 @@ export function CartPage() {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr>
+                  <tr key={order.id}>
                     <td scope="row">1</td>
                     <td>
                       <Link to={`/catalog/${order.id}`}>{order.title}</Link>
