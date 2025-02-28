@@ -23,6 +23,7 @@ export function CartPage() {
   };
   const onErrorClick = () => {
     dispatch(changeErrorMessage());
+    setSubmited(false)
     navigate('/cart');
   };
   return (
