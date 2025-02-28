@@ -1,20 +1,24 @@
 import React, {useState} from 'react';
-import {useAppDispatch} from '../../../../../hook/hook';
+import {useAppDispatch, useAppSelector} from '../../../../../hook/hook';
 import {
-  changeOrderQuantity,
   sendOrderDataToServer,
 } from '../../../../../redux/slices/OrderSlice';
 import {CartFinallyOrder} from '../../CardItemPage/CardItemTools/CardItemTools';
-import {getLocalStorageItem} from '../../../../../tools';
 
 interface UserInfo {
   phone: string;
   address: string;
 }
 
-export function OrderForm({orders}: {orders: CartFinallyOrder[]}) {
+interface OrderForm {
+  orders: CartFinallyOrder[],
+  setSubmited: (arg: boolean) => void
+}
+
+export function OrderForm({orders, setSubmited}: OrderForm) {
   const [userInfo, setUserInfo] = useState<UserInfo>({phone: '', address: ''});
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const {cartItems} = useAppSelector(state => state.cart)
   const dispatch = useAppDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,9 +29,8 @@ export function OrderForm({orders}: {orders: CartFinallyOrder[]}) {
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const arr = getLocalStorageItem();
-    if (arr.length > 0) {
-      const itemsDataToServer = arr.map((item) => ({
+    if (cartItems.length > 0) {
+      const itemsDataToServer = cartItems.map((item) => ({
         id: item.id,
         price: item.price,
         count: item.quantity,
@@ -35,9 +38,9 @@ export function OrderForm({orders}: {orders: CartFinallyOrder[]}) {
       dispatch(
         sendOrderDataToServer({owner: userInfo, items: itemsDataToServer}),
       );
-      dispatch(changeOrderQuantity(0));
       setUserInfo({phone: '', address: ''});
       setIsChecked(!isChecked);
+      setSubmited(true)
     }
   };
   return (
@@ -56,6 +59,7 @@ export function OrderForm({orders}: {orders: CartFinallyOrder[]}) {
               pattern="[0-9]{11}"
               minLength={11}
               maxLength={11}
+              title='Формат номера: 7xxxxxxxxxx'
               required
             />
           </div>

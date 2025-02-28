@@ -8,24 +8,27 @@ import {ContactPage} from '../Main/Pages/ContactPage/ContactPage';
 import {CartPage} from '../Main/Pages/CartPage/CartPage';
 import {CardItemPage} from '../Main/Pages/CardItemPage/CardItemPage';
 import {Provider} from 'react-redux';
-import {store} from '../../redux/store/store';
+import {store, persistedStore} from '../../redux/store/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 export function Router() {
   return (
     <Provider store={store}>
-      <BRouter basename='/react-diplom-front'>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomePage />} />
-            <Route path="catalog" element={<CatalogPage />} />
-            <Route path="catalog/:id" element={<CardItemPage />} />
-            <Route path="about" element={<AboutPage />} />
-            <Route path="contacts" element={<ContactPage />} />
-            <Route path="cart" element={<CartPage />} />
-            <Route path="*" element={<Page404 />} />
-          </Route>
-        </Routes>
-      </BRouter>
+      <PersistGate loading={null} persistor={persistedStore}>
+        <BRouter basename={import.meta.env.VITE_BASENAME}>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="catalog" element={<CatalogPage />} />
+              <Route path="catalog/:id" element={<CardItemPage />} />
+              <Route path="about" element={<AboutPage />} />
+              <Route path="contacts" element={<ContactPage />} />
+              <Route path="cart" element={<CartPage />} />
+              <Route path="*" element={<Page404 />} />
+            </Route>
+          </Routes>
+        </BRouter>
+      </PersistGate>
     </Provider>
   );
 }

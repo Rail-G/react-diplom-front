@@ -3,13 +3,12 @@ import '../../../../style/MenuTools.css';
 import React, {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../hook/hook';
 import {changeSearch} from '../../../redux/slices/CardsSlice';
-import {changeOrderQuantity} from '../../../redux/slices/OrderSlice';
 export function MenuTools() {
   const navigate = useNavigate();
   const [visible, setVisible] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
   const dispatch = useAppDispatch();
-  const {orderQuantity} = useAppSelector((state) => state.order);
+  const {orderQuantity} = useAppSelector((state) => state.cart);
   const onClickHandler = () => {
     navigate('/catalog');
     dispatch(changeSearch({search: value, categoryId: '0'}));
@@ -39,11 +38,6 @@ export function MenuTools() {
       setValue(changedValue);
     }
   };
-  useEffect(() => {
-    const localData = localStorage.getItem('cartItems');
-    const data = localData ? JSON.parse(localData) : [];
-    dispatch(changeOrderQuantity(data.length));
-  }, [dispatch]);
   return (
     <div>
       <div className="header-controls-pics">

@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../../../../../hook/hook';
-import {changeOrderQuantity} from '../../../../../redux/slices/OrderSlice';
+import {useAppDispatch, useAppSelector} from '../../../../../hook/hook';
+import { addCartItems, updateQuantityCartItem } from '../../../../../redux/slices/CartSlice';
 
 interface CartOrderItem {
   id: number;
@@ -30,6 +30,7 @@ export function CardItemTools({
   const [quantity, setQuantity] = useState<number>(1);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const {cartItems} = useAppSelector(state => state.cart)
   const onClickAdd = () => {
     setQuantity((prev) => Math.min(prev + 1, 10));
   };
@@ -38,23 +39,20 @@ export function CardItemTools({
   };
   const onClickToSize = (size: string) => setSelectedSize(size);
   const onClickToSendToCart = () => {
-    const localData = localStorage.getItem('cartItems');
     const cartItem = {
       size: selectedSize as string,
       quantity: quantity,
     };
-    const arr: CartFinallyOrder[] = localData ? JSON.parse(localData) : [];
-    const findedOrder = arr.find(
+    const findedOrder = cartItems.find(
       (order) =>
         order.title == cartOrderItem.title && order.size == cartItem.size,
     );
     if (findedOrder) {
-      findedOrder.quantity += quantity;
+      dispatch(updateQuantityCartItem({id: findedOrder.id, quantity: quantity}))
     } else {
-      arr.push({...cartOrderItem, ...cartItem});
-      dispatch(changeOrderQuantity(arr.length));
+      const newCartItem = {...cartOrderItem, ...cartItem}
+      dispatch(addCartItems(newCartItem));
     }
-    localStorage.setItem('cartItems', JSON.stringify(arr));
     navigate('/cart');
   };
   return (

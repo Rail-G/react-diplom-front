@@ -1,36 +1,25 @@
 import {Link, useNavigate} from 'react-router-dom';
-import {CartFinallyOrder} from '../CardItemPage/CardItemTools/CardItemTools';
+// import {CartFinallyOrder} from '../CardItemPage/CardItemTools/CardItemTools';
 import {OrderForm} from './OrderForm/OrderForm';
-import {useEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../../hook/hook';
-import {getLocalStorageItem} from '../../../../tools';
 import {Success} from '../../Success/Success';
 import {Loader} from '../../Loader/Loader';
 import {Error} from '../../Error/Error';
 import {EmptyCart} from '../../EmptyCart/EmptyCart';
 import {changeErrorMessage} from '../../../../redux/slices/OrderSlice';
+import { deleteCartItem } from '../../../../redux/slices/CartSlice';
+import { useState } from 'react';
 
 export function CartPage() {
-  const [orders, setOrders] = useState<CartFinallyOrder[]>([]);
   const dispatch = useAppDispatch();
-  const {serverResponse, loading, error} = useAppSelector(
+  const {loading, error} = useAppSelector(
     (state) => state.order,
   );
+  const [submited, setSubmited] = useState(false)
+  const {cartItems} = useAppSelector(state => state.cart)
   const navigate = useNavigate();
-  useEffect(() => {
-    if (serverResponse) {
-      localStorage.removeItem('cartItems');
-    }
-    if (!serverResponse) {
-      const orders = getLocalStorageItem();
-      setOrders(orders);
-    }
-  }, [serverResponse]);
   const onDelete = (id: number): void => {
-    const orders = getLocalStorageItem();
-    const filteredOrders = orders.filter((order) => order.id != id);
-    localStorage.setItem('cartItems', JSON.stringify(filteredOrders));
-    setOrders(filteredOrders);
+    dispatch(deleteCartItem(id))
   };
   const onErrorClick = () => {
     dispatch(changeErrorMessage());
@@ -40,11 +29,11 @@ export function CartPage() {
     <>
       {loading && <Loader />}
       {error && <Error errorText={error} onClick={onErrorClick} />}
-      {!loading && serverResponse && error == null && <Success />}
-      {!loading && !serverResponse && error == null && orders.length == 0 && (
+      {!loading && error == null && submited &&  <Success />}
+      {!loading && !submited && error == null && cartItems.length == 0 && (
         <EmptyCart />
       )}
-      {!loading && !serverResponse && error == null && orders.length > 0 && (
+      {!loading && error == null && cartItems.length > 0 && (
         <>
           <section className="cart">
             <h2 className="text-center">Корзина</h2>
@@ -61,7 +50,7 @@ export function CartPage() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {cartItems.map((order) => (
                   <tr key={order.id}>
                     <td scope="row">1</td>
                     <td>
@@ -86,7 +75,7 @@ export function CartPage() {
                     Общая стоимость
                   </td>
                   <td>
-                    {orders.reduce(
+                    {cartItems.reduce(
                       (accum, next) => accum + next.price * next.quantity,
                       0,
                     )}
@@ -95,7 +84,7 @@ export function CartPage() {
               </tbody>
             </table>
           </section>
-          <OrderForm orders={orders} />
+          <OrderForm orders={cartItems} setSubmited={setSubmited}/>
         </>
       )}
     </>

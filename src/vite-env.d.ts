@@ -68,8 +68,6 @@ interface OrderState {
   orderData: OrderData | null;
   loading: boolean;
   error: string | null;
-  orderQuantity: number;
-  serverResponse: boolean;
 }
 
 interface OrderUserInfo {
@@ -86,4 +84,9 @@ interface OrderItems {
 interface OrderData {
   owner: OrderUserInfo;
   items: OrderItems[];
+}
+
+interface CartState {
+  cartItems: CartFinallyOrder[];
+  orderQuantity: number
 }

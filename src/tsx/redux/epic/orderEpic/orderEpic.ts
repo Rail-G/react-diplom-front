@@ -5,8 +5,9 @@ import {
   sendOrderDataToServerError,
   sendOrderDataToServerSuccess,
 } from '../../slices/OrderSlice';
-import {catchError, map, of, switchMap} from 'rxjs';
+import {catchError, mergeMap, of, switchMap} from 'rxjs';
 import {ajax} from 'rxjs/ajax';
+import { clearCartItem } from '../../slices/CartSlice';
 
 export const orderEpic: Epic<RootAction, RootAction, RootState> = (action$) =>
   action$.pipe(
@@ -20,7 +21,7 @@ export const orderEpic: Epic<RootAction, RootAction, RootState> = (action$) =>
         },
         body: action.payload,
       }).pipe(
-        map(() => sendOrderDataToServerSuccess()),
+        mergeMap(() => [sendOrderDataToServerSuccess(), clearCartItem()]),
         catchError((error) => of(sendOrderDataToServerError(error.message))),
       ),
     ),

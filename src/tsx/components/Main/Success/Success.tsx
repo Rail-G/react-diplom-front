@@ -1,15 +1,9 @@
 import {useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../../../hook/hook';
-import {changeServerResponse} from '../../../redux/slices/OrderSlice';
 
 export function Success() {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const onClick = () => {
     navigate('/');
-    setTimeout(() => {
-      dispatch(changeServerResponse());
-    }, 500);
   };
   return (
     <section className="top-sales text-center">

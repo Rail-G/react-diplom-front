@@ -1,11 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {createEpicMiddleware} from 'redux-observable';
-import cardsSlice, {cardsAction} from '../slices/CardsSlice';
-import categoriesSlice, {categoriesAction} from '../slices/CategoriesSlice';
-import topSalesSlice, {topSalesAction} from '../slices/topSalesSlice';
-import cardItemSlice, {cardItemAction} from '../slices/CardItemSlice';
-import orderSlice, {orderAction} from '../slices/OrderSlice';
+import {cardsAction} from '../slices/CardsSlice';
+import {categoriesAction} from '../slices/CategoriesSlice';
+import {topSalesAction} from '../slices/topSalesSlice';
+import {cardItemAction} from '../slices/CardItemSlice';
+import {orderAction} from '../slices/OrderSlice';
 import {combinedEpics} from '../epic';
+import { rootReducer } from '../slices';
+import { persistReducer, persistStore } from 'redux-persist';
+import { persistConfig } from '../persist';
+import { cartAction } from '../slices/CartSlice';
 
 const epicMiddleware = createEpicMiddleware<
   RootAction,
@@ -13,17 +17,17 @@ const epicMiddleware = createEpicMiddleware<
   RootState
 >();
 
+const persistedReducer = persistReducer<ReturnType<typeof rootReducer>>(persistConfig, rootReducer)
+
 export const store = configureStore({
-  reducer: {
-    cards: cardsSlice,
-    cardItem: cardItemSlice,
-    categories: categoriesSlice,
-    topSales: topSalesSlice,
-    order: orderSlice,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(epicMiddleware),
+    getDefaultMiddleware({serializableCheck: {
+      ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
+    }}).concat(epicMiddleware),
 });
+
+export const persistedStore = persistStore(store)
 
 epicMiddleware.run(combinedEpics);
 
@@ -33,11 +37,13 @@ export type RootAction =
   | categoriesAction
   | topSalesAction
   | cardItemAction
-  | orderAction;
+  | orderAction
+  | cartAction;
 export type RootState = {
   cards: CardsState;
   categories: CategoriesState;
   topSales: TopSalesState;
   cardItem: CardItemState;
   order: OrderState;
+  cart: CartState;
 };
