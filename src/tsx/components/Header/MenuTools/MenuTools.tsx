@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 import '../../../../style/MenuTools.css';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../hook/hook';
 import {changeSearch} from '../../../redux/slices/CardsSlice';
 export function MenuTools() {
